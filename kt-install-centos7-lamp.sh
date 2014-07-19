@@ -31,7 +31,7 @@ Listen 80
 Include conf.modules.d/*.conf
 User apache
 Group apache
-ServerAdmin root@$DOMAIN
+ServerAdmin $ADMIN_MAIL
 ServerName $HOST_NAME
 
 <Directory />
