@@ -1,6 +1,7 @@
 #!/bin/sh
 
 ADMIN_MAIL="hostmaster@example.com"
+AUTHORIZED_KEYS="ssh-rsa KEY"
 HOST_NAME="host.example.com"
 DOMAIN="example.com"
 IPv4_ADDRESS="1.2.3.4"
@@ -23,7 +24,7 @@ yum update -y -q &> /dev/null
 yum install -y -q vim-enhanced bind-utils telnet wget curl &> /dev/null
 yum install -y -q httpd mod_ssl &> /dev/null
 
-cp -f /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org
+cp -f /etc/httpd/conf/httpd.conf /etc/httpd/conf/httpd.conf.org &> /dev/null
 
 cat > /etc/httpd/conf/httpd.conf <<EOF
 ServerRoot "/etc/httpd"
@@ -105,10 +106,10 @@ Include /etc/httpd/sites-enabled/
 
 EOF
 
-mkdir /etc/httpd/sites-available
-mkdir /etc/httpd/sites-enabled
+mkdir /etc/httpd/sites-available &> /dev/null
+mkdir /etc/httpd/sites-enabled &> /dev/null
 
-cp -f /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/welcome.conf.org
+cp -f /etc/httpd/conf.d/welcome.conf /etc/httpd/conf.d/welcome.conf.org &> /dev/null
 
 cat > /etc/httpd/conf.d/welcome.conf <<EOF
 # This configuration file enables the default "Welcome" page if there
@@ -143,19 +144,19 @@ EOF
 
 yum install -y -q php php-mysql php-gd php-pear php-mbstring php-xml php-devel &> /dev/null
 
-systemctl enable httpd.service
-systemctl start httpd.service
+systemctl enable httpd.service &> /dev/null
+systemctl start httpd.service &> /dev/null
 
 yum install -y -q mariadb-server mariadb &> /dev/null
 
-systemctl enable mariadb.service
-systemctl start mariadb.service
+systemctl enable mariadb.service &> /dev/null
+systemctl start mariadb.service &> /dev/null
 
-wget -q -O /tmp/phpmyadmin.tar.gz http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.2.6/phpMyAdmin-4.2.6-english.tar.gz/download
-tar -xzf /tmp/phpmyadmin.tar.gz -C /tmp
-rm -rf /tmp/phpmyadmin.tar.gz
-rm -rf /usr/share/phpmyadmin
-mv /tmp/php* /usr/share/phpmyadmin
+wget -q -O /tmp/phpmyadmin.tar.gz http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.2.6/phpMyAdmin-4.2.6-english.tar.gz/download &> /dev/null
+tar -xzf /tmp/phpmyadmin.tar.gz -C /tmp &> /dev/null
+rm -rf /tmp/phpmyadmin.tar.gz &> /dev/null
+rm -rf /usr/share/phpmyadmin &> /dev/null
+mv /tmp/php* /usr/share/phpmyadmin &> /dev/null
 
 cat > /etc/httpd/conf.d/phpmyadmin.conf <<EOF
 #
@@ -179,24 +180,29 @@ Alias /mysqladmin /usr/share/phpmyadmin
 
 EOF
 
+systemctl restart httpd.service &> /dev/null
+
 yum install -y -q  logwatch &> /dev/null
 
-echo -e MailFrom = hostmaster@"$DOMAIN\n"Service = -SSHD"\n"Service = -postfix"\n" >> /etc/logwatch/conf/logwatch.conf
+echo -e MailFrom = hostmaster@"$DOMAIN\n"Service = -SSHD"\n"Service = -postfix"\n" >> /etc/logwatch/conf/logwatch.conf &> /dev/null
 
-echo -e root: "$ADMIN_MAIL\n" >> /etc/aliases
+echo -e root: "$ADMIN_MAIL\n" >> /etc/aliases &> /dev/null
 
-newaliases
+newaliases &> /dev/null
 
-systemctl start firewalld
+systemctl start firewalld &> /dev/null
 firewall-cmd --permanent --zone=public --add-service=ssh &> /dev/null
 firewall-cmd --permanent --zone=public --add-service=http &> /dev/null
 firewall-cmd --permanent --zone=public --add-service=https &> /dev/null
 firewall-cmd --reload &> /dev/null
 
+ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa &> /dev/null
+rm -rf ~/.ssh/id_dsa* &> /dev/null
+echo -e "$AUTHORIZED_KEYS\n" >> ~/.ssh/authorized_keys &> /dev/null
 
+echo " "
 echo "Post install tasks:"
 echo " "
-echo "1) MariaDB"
-echo "/usr/bin/mysql_secure_installation"
+echo "1) mariadb installation: /usr/bin/mysql_secure_installation"
 echo " "
 
