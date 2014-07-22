@@ -154,7 +154,7 @@ systemctl start mariadb.service &> /dev/null
 
 wget -q -O /tmp/phpmyadmin.tar.gz http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.2.6/phpMyAdmin-4.2.6-english.tar.gz/download &> /dev/null
 tar -xzf /tmp/phpmyadmin.tar.gz -C /tmp &> /dev/null
-rm -rf /tmp/phpmyadmin.tar.gz &> /dev/null
+rm -f /tmp/phpmyadmin.tar.gz &> /dev/null
 rm -rf /usr/share/phpmyadmin &> /dev/null
 mv /tmp/php* /usr/share/phpmyadmin &> /dev/null
 
@@ -184,9 +184,126 @@ systemctl restart httpd.service &> /dev/null
 
 yum install -y -q  logwatch &> /dev/null
 
-echo -e MailFrom = hostmaster@"$DOMAIN\n"Service = -SSHD"\n"Service = -postfix"\n" >> /etc/logwatch/conf/logwatch.conf &> /dev/null
+cp -f /etc/logwatch/conf/logwatch.conf /etc/logwatch/conf/logwatch.conf.org &> /dev/null
 
-echo -e root: "$ADMIN_MAIL\n" >> /etc/aliases &> /dev/null
+cat > /etc/logwatch/conf/logwatch.conf <<EOF
+# Local configuration options go here (defaults are in /usr/share/logwatch/default.conf/logwatch.conf)
+MailFrom = hostmaster@$DOMAIN
+Service = -SSHD
+Service = -postfix
+
+EOF
+
+yum install -y -q  postfix &> /dev/null
+
+cp -f /etc/postfix/main.cf /etc/postfix/main.cf.org &> /dev/null
+
+cat > /etc/postfix/main.cf <<EOF
+queue_directory = /var/spool/postfix
+command_directory = /usr/sbin
+daemon_directory = /usr/libexec/postfix
+data_directory = /var/lib/postfix
+mail_owner = postfix
+myhostname = $HOST_NAME
+mydomain = $DOMAIN
+myorigin = $HOST_NAME
+inet_interfaces = localhost
+inet_protocols = all
+mydestination = $HOST_NAME, localhost.$DOMAIN, localhost
+unknown_local_recipient_reject_code = 550
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+smtpd_banner = $HOST_NAME
+sendmail_path = /usr/sbin/sendmail.postfix
+newaliases_path = /usr/bin/newaliases.postfix
+mailq_path = /usr/bin/mailq.postfix
+setgid_group = postdrop
+html_directory = no
+manpage_directory = /usr/share/man
+sample_directory = /usr/share/doc/postfix-2.10.1/samples
+readme_directory = /usr/share/doc/postfix-2.10.1/README_FILES
+
+EOF
+
+systemctl enable postfix.service &> /dev/null
+systemctl start postfix.service &> /dev/null
+
+cp -f /etc/aliases /etc/aliases.org &> /dev/null
+
+cat > /etc/aliases <<EOF
+# The program "newaliases" must be run after this file is
+# updated for any changes to show through to sendmail
+mailer-daemon:	postmaster
+postmaster:	root
+bin:		root
+daemon:		root
+adm:		root
+lp:		root
+sync:		root
+shutdown:	root
+halt:		root
+mail:		root
+news:		root
+uucp:		root
+operator:	root
+games:		root
+gopher:		root
+ftp:		root
+nobody:		root
+radiusd:	root
+nut:		root
+dbus:		root
+vcsa:		root
+canna:		root
+wnn:		root
+rpm:		root
+nscd:		root
+pcap:		root
+apache:		root
+webalizer:	root
+dovecot:	root
+fax:		root
+quagga:		root
+radvd:		root
+pvm:		root
+amandabackup:		root
+privoxy:	root
+ident:		root
+named:		root
+xfs:		root
+gdm:		root
+mailnull:	root
+postgres:	root
+sshd:		root
+smmsp:		root
+postfix:	root
+netdump:	root
+ldap:		root
+squid:		root
+ntp:		root
+mysql:		root
+desktop:	root
+rpcuser:	root
+rpc:		root
+nfsnobody:	root
+ingres:		root
+system:		root
+toor:		root
+manager:	root
+dumper:		root
+abuse:		root
+www:		root
+webmaster:	root
+noc:		root
+security:	root
+hostmaster:	root
+info:		postmaster
+marketing:	postmaster
+sales:		postmaster
+support:	postmaster
+root: $ADMIN_MAIL
+
+EOF
 
 newaliases &> /dev/null
 
@@ -196,13 +313,13 @@ firewall-cmd --permanent --zone=public --add-service=http &> /dev/null
 firewall-cmd --permanent --zone=public --add-service=https &> /dev/null
 firewall-cmd --reload &> /dev/null
 
+rm -f ~/.ssh/id_dsa* &> /dev/null
 ssh-keygen -t rsa -N '' -f ~/.ssh/id_rsa &> /dev/null
-rm -rf ~/.ssh/id_dsa* &> /dev/null
+rm -f ~/.ssh/id_dsa* &> /dev/null
 echo -e "$AUTHORIZED_KEYS\n" >> ~/.ssh/authorized_keys &> /dev/null
 
 echo " "
 echo "Post install tasks:"
-echo " "
 echo "1) mariadb installation: /usr/bin/mysql_secure_installation"
 echo " "
 
