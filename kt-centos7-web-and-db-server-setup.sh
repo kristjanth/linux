@@ -1,5 +1,4 @@
 #!/bin/sh
-
 ADMIN_MAIL="hostmaster@example.com"
 AUTHORIZED_KEYS="ssh-rsa ssh-key"
 HOST_NAME="host.example.com"
@@ -145,7 +144,7 @@ EnableSendfile on
 IncludeOptional conf.d/*.conf
 
 NameVirtualHost *:80
-Include /etc/httpd/sites/*.conf
+IncludeOptional sites/*.conf
 
 EOF
 
@@ -539,6 +538,13 @@ systemctl enable mariadb.service &> /dev/null
 systemctl start mariadb.service &> /dev/null
 fi
 
+cat > /root/.my.cnf <<EOF
+[client]
+user=root
+password="your password here"
+
+EOF
+
 yum install -y -q  logwatch &> /dev/null
 
 cp -f /etc/logwatch/conf/logwatch.conf /etc/logwatch/conf/logwatch.conf-$BUILD_DATE &> /dev/null
@@ -684,5 +690,6 @@ echo " "
 
 echo "Complete post setup tasks:"
 echo "/usr/bin/mysql_secure_installation"
+echo "vim /root/.my.cnf"
 echo " "
 
