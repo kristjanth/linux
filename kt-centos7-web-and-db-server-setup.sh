@@ -142,8 +142,6 @@ LogLevel warn
 EnableSendfile on
 
 IncludeOptional conf.d/*.conf
-
-NameVirtualHost *:80
 IncludeOptional sites/*.conf
 
 EOF
