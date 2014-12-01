@@ -1,4 +1,16 @@
 #!/bin/bash
+
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+# =
+# =                             Create mysql user and database
+# =
+# =  Usage:
+# =        ./kt-mysql-add-user-db.sh exampleusr examplepw exampled
+# =    or
+# =        ./kt-mysql-add-user-db.sh            (and specify parameters in the script)
+# = 
+# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
+
 if [ "$1" != "" ]; then
 	DB_USER=$1
 	DB_PASS=$2
