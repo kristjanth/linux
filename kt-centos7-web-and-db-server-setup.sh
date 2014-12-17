@@ -353,6 +353,7 @@ default_socket_timeout = 60
 cli_server.color = On
 [Date]
 ;date.timezone =
+date.timezone = Atlantic/Reykjavik
 [filter]
 [iconv]
 [intl]
@@ -570,7 +571,7 @@ mydomain = $DOMAIN
 myorigin = \$myhostname
 inet_interfaces = localhost
 inet_protocols = all
-mydestination = \$myorigin, \$mydomain, localhost
+mydestination = \$myorigin, localhost
 unknown_local_recipient_reject_code = 550
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
