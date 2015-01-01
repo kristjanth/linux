@@ -1,17 +1,4 @@
 #!/bin/sh
-
-# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-# =
-# =                             Fuse and S3FS on CentOS 7 Setup
-# =
-# =  Thanks to:
-# =  1) How to Mount S3 Bucket on CentOS/RHEL and Ubuntu using S3FS:
-# =  http://tecadmin.net/mount-s3-bucket-centosrhel-ubuntu-using-s3fs
-# =  2) How to mount Amazon S3 bucket on CentOS or RHEL v7.x:
-# =  http://www.joe0.com/2014/10/18/how-to-mount-amazon-s3-bucket-on-centos-or-rhel-v7-x/
-# = 
-# = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-
 AWS_ACCESS_KEY_ID="AA"
 AWS_SECRET_ACCESS_KEY="XX"
 AWS_S3BUCKET="bucket"
