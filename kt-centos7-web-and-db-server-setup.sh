@@ -269,7 +269,7 @@ EOF
 
 cat > /etc/nginx/php-common.conf <<EOF
 location / {
-try_files $uri $uri/ /index.php?q=$uri&$args;
+try_files $uri $uri/ /index.php?$args;
 }
 
 location ~* /(?:uploads|files)/.*\.php$ {
