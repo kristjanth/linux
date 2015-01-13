@@ -559,8 +559,6 @@ cp -f /etc/logwatch/conf/logwatch.conf /etc/logwatch/conf/logwatch.conf-$BUILD_D
 cat > /etc/logwatch/conf/logwatch.conf <<EOF
 # Local configuration options go here (defaults are in /usr/share/logwatch/default.conf/logwatch.conf)
 MailFrom = hostmaster@$DOMAIN
-Service = -SSHD
-Service = -postfix
 
 EOF
 
