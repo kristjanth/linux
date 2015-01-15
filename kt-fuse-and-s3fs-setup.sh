@@ -40,7 +40,7 @@ make install &> /dev/null
 yum install -y -q fuse-libs &> /dev/null
 
 cat > ~/.passwd-s3fs <<EOF
-$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY
+$AWS_S3BUCKET:$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY
 
 EOF
 
