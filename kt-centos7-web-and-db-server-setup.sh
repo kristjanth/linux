@@ -56,7 +56,7 @@ SELINUXTYPE=targeted
 
 EOF
 
-wget -q -O /tmp/phpmyadmin.tar.gz http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.2.12/phpMyAdmin-4.2.12-english.tar.gz/download &> /dev/null
+wget -q -O /tmp/phpmyadmin.tar.gz http://sourceforge.net/projects/phpmyadmin/files/phpMyAdmin/4.3.8/phpMyAdmin-4.3.8-english.tar.gz/download &> /dev/null
 tar -xzf /tmp/phpmyadmin.tar.gz -C /tmp &> /dev/null
 rm -f /tmp/phpmyadmin.tar.gz &> /dev/null
 rm -rf /usr/share/phpmyadmin &> /dev/null
