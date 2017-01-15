@@ -3,15 +3,15 @@ AWS_ACCESS_KEY_ID="AAAAAAAA"
 AWS_SECRET_ACCESS_KEY="XXXXXXXXXXXXXXXXXX"
 AWS_S3BUCKET="mybucketname"
 S3_MOUNT_PATH="/mnt/s3"
-FUSE_URL="https://github.com/libfuse/libfuse/releases/download/fuse_2_9_5/fuse-2.9.5.tar.gz"
+FUSE_URL="https://github.com/libfuse/libfuse/releases/download/fuse-2.9.7/fuse-2.9.7.tar.gz"
 FUSE_PATH="/usr/src/fuse"
-S3FS_URL="https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.79.tar.gz"
+S3FS_URL="https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.80.tar.gz"
 S3FS_PATH="/usr/src/s3fs"
 
 # Do not change anything below this
 
 yum remove -y -q fuse fuse-s3fs &> /dev/null
-yum install -y -q gcc libstdc++-devel gcc-c++ curl-devel libxml2-devel openssl-devel mailcap automake &> /dev/null
+yum install -y -q wget gcc libstdc++-devel gcc-c++ curl-devel libxml2-devel openssl-devel mailcap automake &> /dev/null
 
 wget -q -O /tmp/fuse.tar.gz $FUSE_URL &> /dev/null
 tar -xzf /tmp/fuse.tar.gz -C /tmp &> /dev/null
