@@ -11,11 +11,11 @@ S3FS_PATH="/usr/src/s3fs"
 # Do not change anything below this
 
 yum remove -y -q fuse fuse-s3fs &> /dev/null
-yum install -y -q wget gcc libstdc++-devel gcc-c++ curl-devel libxml2-devel openssl-devel mailcap automake &> /dev/null
+yum install -y -q wget gcc libstdc++-devel gcc-c++ curl-devel libxml2-devel openssl-devel mailcap automake xz-utils &> /dev/null
 
-wget -q -O /tmp/fuse.tar.gz $FUSE_URL &> /dev/null
-tar -xzf /tmp/fuse.tar.gz -C /tmp &> /dev/null
-rm -f /tmp/fuse.tar.gz &> /dev/null
+wget -q -O /tmp/fuse.tar.xz $FUSE_URL &> /dev/null
+tar -xf /tmp/fuse.tar.xz -C /tmp &> /dev/null
+rm -f /tmp/fuse.tar.xz &> /dev/null
 rm -rf /usr/src/fuse &> /dev/null
 mv /tmp/fuse* $FUSE_PATH &> /dev/null
 cd $FUSE_PATH
@@ -48,4 +48,3 @@ mkdir $S3_CACHE_PATH &> /dev/null
 mkdir $S3_MOUNT_PATH &> /dev/null
 chmod 777 $S3_CACHE_PATH $S3_MOUNT_PATH &> /dev/null
 s3fs $AWS_S3BUCKET $S3_MOUNT_PATH &> /dev/null
-
