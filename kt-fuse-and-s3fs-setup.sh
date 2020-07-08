@@ -3,9 +3,9 @@ AWS_ACCESS_KEY_ID="AAAAAAAA"
 AWS_SECRET_ACCESS_KEY="XXXXXXXXXXXXXXXXXX"
 AWS_S3BUCKET="mybucketname"
 S3_MOUNT_PATH="/mnt/s3"
-FUSE_URL="https://github.com/libfuse/libfuse/releases/download/fuse-2.9.7/fuse-2.9.7.tar.gz"
+FUSE_URL="https://github.com/libfuse/libfuse/releases/download/fuse-3.9.2/fuse-3.9.2.tar.xz"
 FUSE_PATH="/usr/src/fuse"
-S3FS_URL="https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.80.tar.gz"
+S3FS_URL="https://github.com/s3fs-fuse/s3fs-fuse/archive/v1.86.tar.gz"
 S3FS_PATH="/usr/src/s3fs"
 
 # Do not change anything below this
@@ -44,9 +44,8 @@ $AWS_S3BUCKET:$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY
 EOF
 
 chmod 600 ~/.passwd-s3fs &> /dev/null
-
 mkdir $S3_CACHE_PATH &> /dev/null
 mkdir $S3_MOUNT_PATH &> /dev/null
 chmod 777 $S3_CACHE_PATH $S3_MOUNT_PATH &> /dev/null
-
 s3fs $AWS_S3BUCKET $S3_MOUNT_PATH &> /dev/null
+
