@@ -42,9 +42,10 @@ yum install -y -q fuse-libs &> /dev/null
 cat > ~/.passwd-s3fs <<EOF
 $AWS_S3BUCKET:$AWS_ACCESS_KEY_ID:$AWS_SECRET_ACCESS_KEY
 EOF
-
 chmod 600 ~/.passwd-s3fs &> /dev/null
-mkdir $S3_CACHE_PATH &> /dev/null
+
 mkdir $S3_MOUNT_PATH &> /dev/null
-chmod 777 $S3_CACHE_PATH $S3_MOUNT_PATH &> /dev/null
+chmod 777 $S3_MOUNT_PATH &> /dev/null
+
 s3fs $AWS_S3BUCKET $S3_MOUNT_PATH &> /dev/null
+
